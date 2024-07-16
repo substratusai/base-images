@@ -10,6 +10,9 @@ on:
 jobs:
   base:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,11 +25,19 @@ jobs:
         with:
           username: "${{ vars.DOCKERHUB_USERNAME }}"
           password: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Log in to the GitHub Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: substratusai/${{ github.job }}
+          images: |
+            substratusai/${{ github.job }}
+            ghcr.io/${{ github.repository }}/${{ github.job }}
       - name: Build and push
         id: build-and-push
         uses: docker/build-push-action@v4
@@ -40,6 +51,9 @@ jobs:
       tag: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
   model-trainer-huggingface:
     needs: base
+    permissions:
+      packages: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,11 +67,19 @@ jobs:
         with:
           username: "${{ vars.DOCKERHUB_USERNAME }}"
           password: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Log in to the GitHub Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: substratusai/${{ github.job }}
+          images: |
+            substratusai/${{ github.job }}
+            ghcr.io/${{ github.repository }}/${{ github.job }}
       - name: Build and push
         id: build-and-push
         uses: docker/build-push-action@v4
@@ -72,6 +94,9 @@ jobs:
   model-loader-huggingface:
     needs: base
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -84,11 +109,19 @@ jobs:
         with:
           username: "${{ vars.DOCKERHUB_USERNAME }}"
           password: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Log in to the GitHub Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: substratusai/${{ github.job }}
+          images: |
+            substratusai/${{ github.job }}
+            ghcr.io/${{ github.repository }}/${{ github.job }}
       - name: Build and push
         id: build-and-push
         uses: docker/build-push-action@v4
@@ -103,6 +136,9 @@ jobs:
   dataset-squad:
     needs: base
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -115,11 +151,19 @@ jobs:
         with:
           username: "${{ vars.DOCKERHUB_USERNAME }}"
           password: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Log in to the GitHub Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: substratusai/${{ github.job }}
+          images: |
+            substratusai/${{ github.job }}
+            ghcr.io/${{ github.repository }}/${{ github.job }}
       - name: Build and push
         id: build-and-push
         uses: docker/build-push-action@v4
@@ -132,6 +176,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   dataset-loader-http:
+    permissions:
+      packages: write
+      contents: read
     needs: base
     runs-on: ubuntu-latest
     steps:
@@ -146,11 +193,19 @@ jobs:
         with:
           username: "${{ vars.DOCKERHUB_USERNAME }}"
           password: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Log in to the GitHub Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: substratusai/${{ github.job }}
+          images: |
+            substratusai/${{ github.job }}
+            ghcr.io/${{ github.repository }}/${{ github.job }}
       - name: Build and push
         id: build-and-push
         uses: docker/build-push-action@v4
@@ -163,6 +218,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   model-server-basaran:
+    permissions:
+      packages: write
+      contents: read
     needs: base
     runs-on: ubuntu-latest
     steps:
@@ -177,11 +235,19 @@ jobs:
         with:
           username: "${{ vars.DOCKERHUB_USERNAME }}"
           password: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Log in to the GitHub Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: substratusai/${{ github.job }}
+          images: |
+            substratusai/${{ github.job }}
+            ghcr.io/${{ github.repository }}/${{ github.job }}
       - name: Build and push
         id: build-and-push
         uses: docker/build-push-action@v4
